@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
@@ -14,10 +15,12 @@ import java.util.Objects;
 public class Comment {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private String body;
 
     //link
+    @ManyToOne
+    private Link link;
 
 
 }

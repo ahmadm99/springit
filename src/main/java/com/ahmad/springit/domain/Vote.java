@@ -13,7 +13,7 @@ import javax.persistence.Id;
 public class Vote {
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
     private int vote;
 
     //user
