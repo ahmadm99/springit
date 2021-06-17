@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class HomeController {
-    @GetMapping("/") //This annotation is the same as @RequestMapping(path = "/", RequestMethod.Get) not sure on syntax
-    public String homePage(){
-        return "Hello, this is my homepage - brought to you by the Controller";
-    }
+//    @GetMapping("/") //This annotation is the same as @RequestMapping(path = "/", RequestMethod.Get) not sure on syntax
+//    public String homePage(){
+//        return "Hello, this is my homepage - brought to you by the Controller";
+//    }
 }
