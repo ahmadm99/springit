@@ -17,19 +17,5 @@ public class SpringitApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SpringitApplication.class, args);
 	}
-// COMMANDLINERUNNER DOES NOT WORK WITHOUT @BEAN... CURRENTLY COMMENTED OUT SO IT DOES NOT WORK
-//	@Bean
-	CommandLineRunner runner(LinkRepository linkRepository, CommentRepository commentRepository){
-		return args -> {
-			Link link = new Link("This is my link", "https://google.com");
-			linkRepository.save(link);
-
-			Comment comment = new Comment("First comment", link);
-			commentRepository.save(comment);
-
-			link.addComment(comment);
-
-		};
-	}
-
+// COMMANDLINERUNNER DOES NOT WORK WITHOUT @BEAN...
 }
