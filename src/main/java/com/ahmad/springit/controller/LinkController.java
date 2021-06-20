@@ -10,9 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/links")
+//@RequestMapping("/links")
 public class LinkController {
-
     private LinkRepository linkRepository;
 
     public LinkController(LinkRepository linkRepository) {
@@ -20,31 +19,44 @@ public class LinkController {
     }
 
     @GetMapping("/")
-    public List<Link> list(){
-        return linkRepository.findAll();
+    public String list(Model model) {
+        model.addAttribute("links", linkRepository.findAll());
+        return "link/list";
     }
 
-    @GetMapping("/foo")
-    public String foo(Model model){
-        model.addAttribute("pageTitle","This title is FOO!");
-        return "foo";
-    }
-
-    //CRUD
-    @PostMapping("/create")
-    public Link create(@ModelAttribute Link link){
-        return linkRepository.save(link);
-    }
-    @GetMapping("/{id}")
-    public Optional<Link> read(@PathVariable Long id){
-        return linkRepository.findById(id);
-    }
-    @PutMapping("/{id}")
-    public Link update(@PathVariable Long id, @ModelAttribute Link link){
-        return linkRepository.save(link);
-    }
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        linkRepository.deleteById(id);
-    }
+//    @GetMapping("/link/${id}")
+//    public String read(@PathVariable Long id, Model model) {
+//        Optional<Link> link = linkRepository.findById(id);
+//        if (link.isPresent()) {
+//            model.addAttribute("link", link.get());
+////            model.addAttribute("success", model.containsAttribute("success"));
+//            return "link/view";
+//        }
+//        else{
+//            return "redirect:/";
+//        }
+//    }
+//
+//    @GetMapping("/")
+//    public List<Link> list(){
+//        return linkRepository.findAll();
+//    }
+//
+//    //CRUD
+//    @PostMapping("/create")
+//    public Link create(@ModelAttribute Link link){
+//        return linkRepository.save(link);
+//    }
+//    @GetMapping("/{id}")
+//    public Optional<Link> read(@PathVariable Long id){
+//        return linkRepository.findById(id);
+//    }
+//    @PutMapping("/{id}")
+//    public Link update(@PathVariable Long id, @ModelAttribute Link link){
+//        return linkRepository.save(link);
+//    }
+//    @DeleteMapping("/{id}")
+//    public void delete(@PathVariable Long id){
+//        linkRepository.deleteById(id);
+//    }
 }
