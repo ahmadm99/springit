@@ -24,7 +24,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .requestMatchers(EndpointRequest.toAnyEndpoint()).hasRole("ADMIN") //meanwhile now any other endpoint requires a role of admin and we customize in the antmatchers
                 .antMatchers("/actuator/").hasRole("ADMIN") // /actuator requires admin role
                 .antMatchers("/").permitAll() // home page is available
-                .antMatchers("/link/submit").hasRole("USER").and().formLogin(); //submit requires user role
+                .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/link/submit").hasRole("USER").and().formLogin() //submit requires user role
+                .and()
+                .csrf().disable()
+                .headers().frameOptions().disable();
     }
 
     @Override
