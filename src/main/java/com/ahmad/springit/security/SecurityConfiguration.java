@@ -25,10 +25,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/actuator/").hasRole("ADMIN") // /actuator requires admin role
                 .antMatchers("/").permitAll() // home page is available
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/link/submit").hasRole("USER").and().formLogin() //submit requires user role
+                .antMatchers("/link/submit").hasRole("USER").and().formLogin().loginPage("/login").permitAll() //submit requires user role
+                .usernameParameter("email") //we do this because we named our username = email; if we kept it username we wouldn't need this. same in password, we kept the default password name password so we don't need to add a password parameter
                 .and()
-                .csrf().disable()
-                .headers().frameOptions().disable();
+                .logout()
+                .and()
+                .rememberMe(); //we are using the default parameter name in out login page which is remember-me, else we need to specify here rememberMeParameter()
+//                .and()
+//                .csrf().disable()
+//                .headers().frameOptions().disable();
     }
 
     @Override
