@@ -3,12 +3,14 @@ package com.ahmad.springit.security;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public UserDetailsServiceImplementation userDetailsService;
@@ -30,10 +32,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .and()
-                .rememberMe(); //we are using the default parameter name in out login page which is remember-me, else we need to specify here rememberMeParameter()
-//                .and()
-//                .csrf().disable()
-//                .headers().frameOptions().disable();
+                .rememberMe() //we are using the default parameter name in out login page which is remember-me, else we need to specify here rememberMeParameter()
+                .and()
+                .csrf().disable()
+                .headers().frameOptions().disable();
     }
 
     @Override
