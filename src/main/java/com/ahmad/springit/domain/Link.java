@@ -24,7 +24,6 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Getter
 @Setter
-@ToString
 @NoArgsConstructor
 public class Link extends Auditable {
 

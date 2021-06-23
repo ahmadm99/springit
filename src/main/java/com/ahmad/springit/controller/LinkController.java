@@ -1,9 +1,12 @@
 package com.ahmad.springit.controller;
 
+import com.ahmad.springit.domain.Comment;
 import com.ahmad.springit.domain.Link;
+import com.ahmad.springit.repository.CommentRepository;
 import com.ahmad.springit.repository.LinkRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,12 +20,14 @@ import java.util.Optional;
 @Controller
 public class LinkController {
     private LinkRepository linkRepository;
+    private CommentRepository commentRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(LinkController.class);
 
 
-    public LinkController(LinkRepository linkRepository) {
+    public LinkController(LinkRepository linkRepository, CommentRepository commentRepository) {
         this.linkRepository = linkRepository;
+        this.commentRepository = commentRepository;
     }
 
     @GetMapping("/")
@@ -35,7 +40,11 @@ public class LinkController {
     public String read(@PathVariable Long id,Model model) {
         Optional<Link> link = linkRepository.findById(id);
         if( link.isPresent() ) {
-            model.addAttribute("link",link.get());
+            Link currentLink = link.get();
+            Comment comment = new Comment();
+            comment.setLink(currentLink);
+            model.addAttribute("comment",comment);
+            model.addAttribute("link",currentLink);
             model.addAttribute("success", model.containsAttribute("success"));
             return "link/view";
         } else {
@@ -61,5 +70,18 @@ public class LinkController {
             redirectAttributes.addAttribute("id",link.getId()).addFlashAttribute("success",true);
             return "redirect:/link/{id}";
         }
+    }
+
+    @Secured({"ROLE_USER"})
+    @PostMapping("/link/comments")
+    public String addComment(@Valid Comment comment, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            logger.info("Error adding new comment");
+        }
+        else{
+            commentRepository.save(comment);
+            logger.info("Added comment successfully");
+        }
+        return "redirect:/link/" + comment.getLink().getId();
     }
 }
