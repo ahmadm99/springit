@@ -1,5 +1,7 @@
 package com.ahmad.springit.controller;
 
+import com.ahmad.springit.Service.LinkService;
+import com.ahmad.springit.Service.VoteService;
 import com.ahmad.springit.domain.Link;
 import com.ahmad.springit.domain.Vote;
 import com.ahmad.springit.repository.LinkRepository;
@@ -14,26 +16,26 @@ import java.util.Optional;
 @RestController
 public class VoteController {
 
-    private VoteRepository voteRepository;
-    private LinkRepository linkRepository;
+    private VoteService voteService;
+    private LinkService linkService;
 
-    public VoteController(VoteRepository voteRepository, LinkRepository linkRepository) {
-        this.voteRepository = voteRepository;
-        this.linkRepository = linkRepository;
+    public VoteController(VoteService voteService, LinkService linkService) {
+        this.voteService = voteService;
+        this.linkService = linkService;
     }
 
     @Secured({"ROLE_USER"})
     @GetMapping("/vote/link/{linkId}/direction/{direction}/votecount/{voteCount}")
     public int vote(@PathVariable Long linkId, @PathVariable short direction, @PathVariable int voteCount) {
-        Optional<Link> optionalLink = linkRepository.findById(linkId);
+        Optional<Link> optionalLink = linkService.findById(linkId);
         if (optionalLink.isPresent()) {
             Link link = optionalLink.get();
             Vote vote = new Vote(direction, link);
-            voteRepository.save(vote);
+            voteService.save(vote);
 
             int updatedVoteCount = direction + voteCount;
             link.setVoteCount(updatedVoteCount);
-            linkRepository.save(link);
+            linkService.save(link);
             return updatedVoteCount;
         }
         return voteCount;

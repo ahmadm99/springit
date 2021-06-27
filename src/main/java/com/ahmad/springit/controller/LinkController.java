@@ -1,5 +1,7 @@
 package com.ahmad.springit.controller;
 
+import com.ahmad.springit.Service.CommentService;
+import com.ahmad.springit.Service.LinkService;
 import com.ahmad.springit.domain.Comment;
 import com.ahmad.springit.domain.Link;
 import com.ahmad.springit.repository.CommentRepository;
@@ -19,26 +21,26 @@ import java.util.Optional;
 
 @Controller
 public class LinkController {
-    private LinkRepository linkRepository;
-    private CommentRepository commentRepository;
+    private LinkService linkService; //we could have linkRepository here instead, but we do this for refactoring and to transfer some of the logic to the service layer so instead of calling the linkRepository directly we call the service layer which calls the repo
+    private CommentService commentService;
 
     private static final Logger logger = LoggerFactory.getLogger(LinkController.class);
 
 
-    public LinkController(LinkRepository linkRepository, CommentRepository commentRepository) {
-        this.linkRepository = linkRepository;
-        this.commentRepository = commentRepository;
+    public LinkController(LinkService linkService, CommentService commentService) {
+        this.linkService = linkService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("links", linkRepository.findAll());
+        model.addAttribute("links", linkService.findAll());
         return "link/list";
     }
 
     @GetMapping("/link/{id}")
     public String read(@PathVariable Long id,Model model) {
-        Optional<Link> link = linkRepository.findById(id);
+        Optional<Link> link = linkService.findById(id);
         if( link.isPresent() ) {
             Link currentLink = link.get();
             Comment comment = new Comment();
@@ -65,7 +67,7 @@ public class LinkController {
             model.addAttribute("link",link);
             return "link/submit";
         } else {
-            linkRepository.save(link);
+            linkService.save(link);
             logger.info("New link was saved successfully");
             redirectAttributes.addAttribute("id",link.getId()).addFlashAttribute("success",true);
             return "redirect:/link/{id}";
@@ -79,7 +81,7 @@ public class LinkController {
             logger.info("Error adding new comment");
         }
         else{
-            commentRepository.save(comment);
+            commentService.save(comment);
             logger.info("Added comment successfully");
         }
         return "redirect:/link/" + comment.getLink().getId();
