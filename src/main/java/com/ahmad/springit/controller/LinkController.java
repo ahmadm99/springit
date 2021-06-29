@@ -70,7 +70,7 @@ public class LinkController {
             linkService.save(link);
             logger.info("New link was saved successfully");
             redirectAttributes.addAttribute("id",link.getId()).addFlashAttribute("success",true);
-            return "redirect:/link/{id}";
+            return "redirect:/";
         }
     }
 
