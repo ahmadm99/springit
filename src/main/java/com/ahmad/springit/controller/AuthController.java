@@ -1,7 +1,9 @@
 package com.ahmad.springit.controller;
 
 import com.ahmad.springit.Service.UserService;
+import com.ahmad.springit.domain.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
@@ -23,7 +25,9 @@ public class AuthController {
     }
 
     @GetMapping("/register")
-    public String register() {
+    public String register(Model model) {
+        model.addAttribute("user",new User());
+        model.addAttribute("success",false);
         return "auth/register";
     }
 }
